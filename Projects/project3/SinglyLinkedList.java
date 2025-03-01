@@ -1,13 +1,13 @@
 public class SinglyLinkedList {
-    private Node headNode = null;
-    private int data = 0;
+    protected Node headNode = null;
+    protected int data = 0;
 
     // Initialize new list with a head node, and insert N nodes
     public SinglyLinkedList(int N) {
         // Head starts at 1
-        this.headNode = new Node(++data, null);
+        this.headNode = new Node(++data, null, null);
 
-        Insert(N);
+        Insert(N - 1);
     }
 
     // Inserts N number of nodes
@@ -15,18 +15,31 @@ public class SinglyLinkedList {
         Node iterNode = this.headNode;
         Node newNode;
 
-        for (int i = 1; i < N; i++) {
-            newNode = new Node(++data, null);
+        while (iterNode.next() != null) {
+            iterNode = iterNode.next();
+        }
+
+        for (int i = 0; i < N; i++) {
+            newNode = new Node(++data, null, null);
 
             iterNode.setNextNode(newNode);
             iterNode = iterNode.next();
         }
     }
 
-    // Deletes node at iteration N
-    public void Delete(int N) {
+    // Deletes node at iteration N and returns its data
+    public int Delete(int N) {
+        int data;
         Node searchNode = this.headNode;
         Node prevNode = null;
+
+        if (N == 1) {
+            this.headNode = searchNode.next();
+            data = searchNode.getData();
+            searchNode = null;
+
+            return data;
+        }
 
         // Move variables to correct location
         for (int i = 1; i < N; i++) {
@@ -40,7 +53,21 @@ public class SinglyLinkedList {
             prevNode.setNextNode(null);
         }
 
+        data = searchNode.getData();
         searchNode = null;
+
+        return data;
+    }
+
+    public Node Search(int N) {
+        Node searchNode = this.headNode;
+
+        // Move variables to correct location
+        for (int i = 1; i < N; i++) {
+            searchNode = searchNode.next();
+        }
+
+        return searchNode;
     }
 
     public void Traversal() {
@@ -57,6 +84,18 @@ public class SinglyLinkedList {
                 break;
             }
         }
+    }
+
+    public int CountElements() {
+        Node iterNode = this.headNode;
+        int count = 1;
+
+        while (iterNode.next() != null) {
+            iterNode = iterNode.next();
+            ++count;
+        }
+
+        return count;
     }
 
 }
