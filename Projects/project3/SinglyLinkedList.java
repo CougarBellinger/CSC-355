@@ -2,6 +2,10 @@ public class SinglyLinkedList {
     protected Node headNode = null;
     protected int data = 0;
 
+    // Needed empty for child constructors
+    public SinglyLinkedList() {
+    }
+
     // Initialize new list with a head node, and insert N nodes
     public SinglyLinkedList(int N) {
         // Head starts at 1
@@ -29,16 +33,16 @@ public class SinglyLinkedList {
 
     // Deletes node at iteration N and returns its data
     public int Delete(int N) {
-        int data;
+        int dataDeleted;
         Node searchNode = this.headNode;
         Node prevNode = null;
 
         if (N == 1) {
             this.headNode = searchNode.next();
-            data = searchNode.getData();
+            dataDeleted = searchNode.getData();
             searchNode = null;
 
-            return data;
+            return dataDeleted;
         }
 
         // Move variables to correct location
@@ -53,10 +57,10 @@ public class SinglyLinkedList {
             prevNode.setNextNode(null);
         }
 
-        data = searchNode.getData();
+        dataDeleted = searchNode.getData();
         searchNode = null;
 
-        return data;
+        return dataDeleted;
     }
 
     public Node Search(int N) {

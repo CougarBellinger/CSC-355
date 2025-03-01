@@ -84,19 +84,47 @@ public class LinkedListTest {
         SinglyLinkedList testList;
         String optionString;
         int optionInt;
-        int N = 0;
+        int listOption;
+        int initialSize;
 
-        System.out.print("\nHello!\nInsert number of items to initialize list: ");
-        N = scanIn.nextInt();
+        // Prompt user for type of linked list
+        System.out.print("\nPick a list type:\n  1) Singly Linked\n  2) Doubly Linked\nSelection: ");
         while (true) {
-            if (N > 0) {
+            try {
+                listOption = scanIn.nextInt();
+            } catch (NumberFormatException e) {
+                System.out.println("\nPlease enter an integer (1 or 2)\n");
+                continue;
+            }
+
+            if (listOption > 0 && listOption <= 2) {
+                break;
+            }
+            System.out.println("\nPlease enter an integer (1 or 2)\n");
+        }
+
+        // Prompt user for list initialization
+        while (true) {
+            System.out.print("\nInsert number of items to initialize list: ");
+            try {
+                initialSize = scanIn.nextInt();
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a number greater than 0\n");
+                continue;
+            }
+            if (initialSize > 0) {
                 break;
             }
 
-            System.out.println("Please enter a number greater than 0");
+            System.out.println("Please enter a number greater than 0\n");
         }
 
-        testList = new SinglyLinkedList(N);
+        // Use previous list option to initialize linked list based on specified type
+        if (listOption == 1) {
+            testList = new SinglyLinkedList(initialSize);
+        } else {
+            testList = new DoublyLinkedList(initialSize);
+        }
 
         System.out.println("Here is your linked list:");
         testList.Traversal();
