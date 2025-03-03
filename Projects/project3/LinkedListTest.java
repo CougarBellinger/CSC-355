@@ -66,8 +66,12 @@ public class LinkedListTest {
                 if (indexFind < 0 || indexFind > count) {
                     System.out.print("(ERROR) Element out of range");
                 }
+                long startTime = System.nanoTime();
                 int dataFound = listIn.Search(indexFind).getData();
-                System.out.printf("Element [%d] found at index %d\n", dataFound, indexFind);
+                long totalTime = System.nanoTime() - startTime;
+
+                System.out.printf("Element [%d] found at index %d in %d nanoseconds\n", dataFound, indexFind,
+                        totalTime);
                 break;
             case 4:
                 System.out.println("Here's your linked list:");
