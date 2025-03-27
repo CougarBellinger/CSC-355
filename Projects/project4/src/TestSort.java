@@ -3,17 +3,19 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class TestSort {
     public static void main(String[] args) {
-        Scanner scnnr = new Scanner(System.in);
-        String fileName = "../data/testArray1.txt";
+        // Scanner scnnr = new Scanner(System.in);
+        String fileName = "project4/data/testArray1.txt";
 
         // sort the array and store it in Shellsort instance
-        Shellsort.sort(fileArray(fileName));
+        Integer[] arrayToSort = fileArray(fileName);
+        System.out.println("Input Array:\n" + Arrays.toString(arrayToSort));
+        Shellsort.sort(arrayToSort);
+
         // print out the shellsort sorted array using to string
-        System.out.println(Arrays.toString(Shellsort.getSorted()));
+        System.out.println("Sorted Array:\n" + Arrays.toString(Shellsort.getSorted()));
     }
 
     public static Integer[] fileArray(String fileName) {
