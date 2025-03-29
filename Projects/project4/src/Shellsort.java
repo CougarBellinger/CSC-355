@@ -1,16 +1,17 @@
 class Shellsort {
     private static Integer[] data;
     private static Integer[] sortedData;
+    private static int passes;
 
     // Sorts the array using shell sort
     public static void sort(Integer[] inputData) {
-        data = inputData;
+        data = inputData.clone();
 
         int temp;
         int passes = 0;
         int n = data.length;
 
-        System.out.println("\nStarting shell sort...");
+        // System.out.println("\nStarting shell sort...");
         long startTime = System.nanoTime();
         for (int gap = n / 2; gap > 0; gap /= 2) {
             for (int i = gap; i < n; i++) {
@@ -21,9 +22,12 @@ class Shellsort {
                 }
                 data[j] = temp;
             }
+            passes++;
         }
         long duration = System.nanoTime() - startTime;
-        System.out.println("Shell sort finished! (" + (duration / Math.pow(10, 9)) + ") seconds.\n");
+        System.out.print("\u001B[36m");
+        System.out.println("Shell sort (" + passes + " passes in " + duration + " nanoseconds.)");
+        System.out.print("\u001B[0m");
         sortedData = data;
         data = inputData;
     }
