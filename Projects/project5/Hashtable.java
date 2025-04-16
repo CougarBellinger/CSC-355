@@ -1,8 +1,8 @@
 @SuppressWarnings("unchecked")
 public class Hashtable<K, V> {
-    private Pair[] table;
-    private int n;// the number of key-value pairs in the table
-    private int m;// the size of the table
+    private Pair<K, V>[] table;
+    private int n; // the number of key-value pairs in the table
+    private int m; // the size of the table
     private double alphaHigh = 0.5;// resize if n/m exceeds this (1/2)
     private double alphaLow = 0.125;// resize if n/m goes below this (1/8)
 
@@ -24,39 +24,105 @@ public class Hashtable<K, V> {
     // return null if key is not in table
     // do not forget that you will have to cast the result to (V)
     public V get(K key) {
-        // TO BE IMPLEMENTED
+        if (key == null)
+            return null;
 
+        int hash = Math.abs(key.hashCode() % m);
+        int originalHash = hash;
+
+        while (table[hash] != null) {
+            if (table[hash].getKey().equals(key)) {
+                return (V) table[hash].getValue();
+            }
+
+            hash = (hash + 1) % m;
+
+            if (hash == originalHash) {
+                break;
+            }
+        }
+
+        return null;
     }
 
     // puts (key, val) into the table or updates value
     // if the key is already in the table
     // resize to getNextNum(2*m) if (double)n/m exceeds alphaHigh after the insert
     public void put(K key, V val) {
-        // TO BE IMPLEMENTED
+        if (key == null)
+            return;
+
+        int hash = Math.abs(key.hashCode() % m);
+
+        while (table[hash] != null) {
+            if (table[hash].getKey().equals(key)) {
+                table[hash].setValue(val);
+                return;
+            }
+
+            hash = (hash + 1) % m;
+        }
+
+        table[hash] = new Pair<K, V>(key, val);
+        ++n;
+        if ((double) n / m > alphaHigh) {
+            resize(getNextNum(2 * m));
+        }
     }
 
     // removes the (key, value) pair associated with <key>
     // returns the deleted value or null if the element was not in the table
     // resize to getNextNum(m/2) if m/2 >= 11 AND (double)n/m < alphaLow after the
     // delete
+
     public V delete(K key) {
-        // TO BE IMPLEMENTED
+        if (key == null)
+            return null;
+
+        int hash;
+        int originalHash;
+
+        hash = Math.abs(key.hashCode() % m);
+        originalHash = hash;
+
+        while (table[hash] != null) {
+            if (table[hash].getKey().equals(key)) {
+                V value = (V) table[hash].getValue();
+                table[hash] = null;
+                --n;
+
+                // rehashAfterDelete(hash);
+
+                if (m / 2 >= 11 && (double) n / m < alphaLow) {
+                    resize(getNextNum(m / 2));
+                }
+
+                return value;
+            }
+
+            hash = (hash + 1) % m;
+
+            if (hash == originalHash) {
+                break;
+            }
+        }
+        return null;
     }
 
     // return true if table is empty
     public boolean isEmpty() {
-        // TO BE IMPLEMENTED
+        return (n == 0);
     }
 
     // return the number of (key,value) pairs in the table
     public int size() {
-        // TO BE IMPLEMENTED
+        return n;
     }
 
     // This method is used for testing only. Do not use this method yourself for any
     // reason
     // other than debugging. Do not change this method.
-    public Pair[] getTable() {
+    public Pair<K, V>[] getTable() {
         return table;
     }
 
@@ -85,4 +151,20 @@ public class Hashtable<K, V> {
         }
         return num;
     }
+
+    private void resize(int newSize) {
+        Pair<K, V>[] oldTable = table;
+        int oldM = m;
+
+        table = new Pair[newSize];
+        m = newSize;
+        n = 0;
+
+        for (int i = 0; i < oldM; i++) {
+            if (oldTable[i] != null) {
+                put((K) oldTable[i].getKey(), (V) oldTable[i].getValue());
+            }
+        }
+    }
+
 }
